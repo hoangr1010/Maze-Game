@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Game Plan
 
 Game name: MAZE RUN
@@ -26,3 +27,7 @@ OBJECTS:
 
 
 
+=======
+# cpmt-201-project
+hello wordl
+>>>>>>> 5359651d672bc926d464578666ad2ca4688c8623
