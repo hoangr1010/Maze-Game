@@ -13,7 +13,7 @@ int main(void){
 
     /* Display splash screen */
     splash_screen();
-    
+
     getchar();
     endwin();
 

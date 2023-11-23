@@ -1,6 +1,10 @@
+#include <ncurses.h>
+#include <stdio.h>
+#include <string.h>
 #include "levels.h"
 #include "game.h"
 #include <ncurses.h>
+#include <stdio.h>
 
 void splash_screen(){
     
@@ -18,7 +22,6 @@ void splash_screen(){
         printw("Arrow keys to move, SPACE to attack and Q to use items");
         printw("\npress any key to continue.....");
         refresh();
-        int ch;
         /*
         while((ch = getch()) == err()){
             printw("\npress any key to continue...");
