@@ -15,8 +15,7 @@ int main(void) {
     splash_screen();
 
     // Create a window
-    WINDOW *mainWin = newwin(30, 30, 0, 0);
-    box(mainWin,0,0);
+    WINDOW *mainWin = newwin(50, 50, 0, 0);
     refresh();
 
     // Game start with levels

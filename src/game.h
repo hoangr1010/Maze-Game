@@ -6,7 +6,6 @@
 
 void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, const char *filename);
 void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols);
-void drawLevel(WINDOW *win, char level[MAX_HEIGHT][MAX_WIDTH], int rows, int cols);
 void splash_screen();
 
 #endif

@@ -35,9 +35,9 @@ void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, co
 
 void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols) {
 	wclear(win);
-	printw("%c", maze[rows][cols]);
+	wrefresh(win);
 	for (int i=0;i<rows;i++) {
-		for (int j=0; i<cols; j++) {
+		for (int j=0; j<cols; j++) {
 			wprintw(win,"%c", maze[i][j]);
 		}
 		wprintw(win,"\n");
