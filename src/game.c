@@ -1,17 +1,27 @@
 #include <ncurses.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "levels.h"
 #include "game.h"
 
 void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, const char *filename) {
 
-	char filepath[] = "/data/";
-	strcat(filepath, filename); 
+	char filepath[] = "./data/";
+	strcat(filepath, filename);
+
 	FILE *file = fopen(filepath, "r");
+
+	if (file == NULL) {
+		endwin();
+		fprintf(stderr, "\n");
+		exit(EXIT_FAILURE);
+	}
 
 	*rows = *cols = 0;
 	int c;
+
 	while ((c=fgetc(file)) != EOF && *rows < MAX_HEIGHT) {
 		if (c=='\n') {
 			*cols = 0;
@@ -27,29 +37,24 @@ void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, co
 
 void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols) {
 	wclear(win);
-<<<<<<< HEAD
-	wrefresh(win);
+	clear();
+
 	for (int i=0;i<rows;i++) {
 		for (int j=0; j<cols; j++) {
 			wprintw(win,"%c", maze[i][j]);
-=======
-
-	for (int i=0;i<rows;i++) {
-		for (int j=0; i<cols; j++) {
-			wprintw(win, "%c", maze[i][j]);
->>>>>>> parent of f172194 (update debug)
 		}
 		wprintw(win,"\n");
 	}
+	refresh();
 	wrefresh(win);
 }
 
 void splash_screen(){
-    
+
     if (has_colors()){
         init_pair(1, COLOR_GREEN, COLOR_BLACK);
         attron(COLOR_PAIR(1));
-        printw("___  ___               ______\n");            
+        printw("___  ___               ______\n");
         printw("|  \\/  |               | ___ \\\n");
         printw("| .  . | __ _ _______  | |_/ /   _ _ __  \n");
         printw("| |\\/| |/ _` |_  / _ \\ |    / | | | '_ \\\n");
@@ -60,6 +65,8 @@ void splash_screen(){
         printw("Arrow keys to move, SPACE to attack and Q to use items");
         printw("\npress any key to continue.....");
         refresh();
+
+	getch();
         /*
 	int ch;
 

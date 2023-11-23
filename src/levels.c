@@ -8,30 +8,13 @@
 
 void level(WINDOW *win, const int levelNum) {
 
-	//char maze[MAX_HEIGHT][MAX_WIDTH];
-	//char filename[MAX_LENGTH];
-	//snprintf(filename, MAX_LENGTH, "maze%d.txt", levelNum);
-	//int rows, cols;
+	char maze[MAX_HEIGHT][MAX_WIDTH];
+	char filename[MAX_LENGTH];
+	snprintf(filename, MAX_LENGTH, "maze%d.txt", levelNum);
+	int rows, cols;
 
-	//readMazeFromFile(maze, &rows, &cols, filename);
-	char maze[11][19] = {
-    "##################",
-    "|     #   #      #",
-    "####  #   #     ##",
-    "#           |---|#",
-    "####  #    #######",
-    "#     #    []    #",
-    "#  #  #T   #  #  #",
-    "#  #  #    #  #  #",
-    "#######    ####  #",
-    "#       T     #  |",
-    "##################"
-	};
-	wprintw(win,"%c",maze[10][10]);
-	wrefresh(win);
-	getch();
-	drawMaze(win, maze, 11, 19);
-
+	readMazeFromFile(maze, &rows, &cols, filename);
+	drawMaze(win, maze, rows, cols);
 	getch();
 }
 
