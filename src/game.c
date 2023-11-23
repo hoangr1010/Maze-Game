@@ -23,7 +23,6 @@ void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, co
 	*rows = *cols = 0;
 	int c;
 	while ((c=fgetc(file)) != EOF && *rows < MAX_HEIGHT) {
-@@ -27,22 +35,23 @@ void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, co
 
 void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols) {
 	wclear(win);
@@ -51,7 +50,6 @@ void splash_screen(){
         printw("|  \\/  |               | ___ \\\n");
         printw("| .  . | __ _ _______  | |_/ /   _ _ __  \n");
         printw("| |\\/| |/ _` |_  / _ \\ |    / | | | '_ \\\n");
-@@ -53,6 +62,9 @@ void splash_screen(){
         printw("Arrow keys to move, SPACE to attack and Q to use items");
         printw("\npress any key to continue.....");
         refresh();
