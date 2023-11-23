@@ -11,10 +11,8 @@ int main(void){
     raw();
     keypad(stdscr, TRUE);   // Enable special keys
     noecho();   // Do not display input characters
-
     /* Display splash screen */
     splash_screen();
-
     // Create a window
     WINDOW *mainWin = newwin(50, 50, 0, 0);
     box(mainWin,0,0);

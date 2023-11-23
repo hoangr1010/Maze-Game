@@ -9,7 +9,7 @@
 void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, const char *filename) {
 
 	char filepath[] = "./data/";
-	strcat(filepath, filename);
+	strcat(filepath, filename); 
 
 	FILE *file = fopen(filepath, "r");
 
@@ -24,16 +24,15 @@ void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, co
 
 	while ((c=fgetc(file)) != EOF && *rows < MAX_HEIGHT) {
 		if (c=='\n') {
-			*cols = 0;
-			(*rows)++;
-		} else {
-			maze[*rows][(*cols)] = c;
-			(*cols)++;
+				*cols = 0;
+				(*rows)++;
+			} else {
+				maze[*rows][(*cols)] = c;
+				(*cols)++;
+			}
 		}
+		fclose(file);
 	}
-
-	fclose(file);
-}
 
 void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols) {
 	wclear(win);
@@ -50,15 +49,17 @@ void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols)
 }
 
 void splash_screen(){
+    
 
     if (has_colors()){
         init_pair(1, COLOR_GREEN, COLOR_BLACK);
         attron(COLOR_PAIR(1));
+        printw("___  ___               ______\n");            
         printw("___  ___               ______\n");
         printw("|  \\/  |               | ___ \\\n");
         printw("| .  . | __ _ _______  | |_/ /   _ _ __  \n");
         printw("| |\\/| |/ _` |_  / _ \\ |    / | | | '_ \\\n");
-        printw("| |  | | (_| |/ /  __/ | |\\ \\ |_| | | | |\n");
+	printw("| |  | | (_| |/ /  __/ | |\\ \\ |_| | | | |\n");
         printw("\\_|  |_/\\__,_/___\\___| \\_| \\_\\__,_|_| |_|\n");
         attroff(COLOR_PAIR(1));
         printw("\nEscape the maze.\n");
@@ -78,4 +79,3 @@ void splash_screen(){
     }
     return;
 }
-
