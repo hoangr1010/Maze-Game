@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <ncurses.h>
 #include "game.h"
-#include "levels.h"
 
-int main(void) {
+int main(void){
+
     initscr();
     start_color();  // Enable colour support
     cbreak();   // Disable line buffering
@@ -14,6 +14,7 @@ int main(void) {
     /* Display splash screen */
     splash_screen();
 
+<<<<<<< HEAD
     // Create a window
     WINDOW *mainWin = newwin(50, 50, 0, 0);
     refresh();
@@ -28,6 +29,9 @@ int main(void) {
     getch();
 
     delwin(mainWin);
+=======
+    getchar();
+>>>>>>> parent of f172194 (update debug)
     endwin();
 
     return 0;

@@ -33,7 +33,6 @@ void level(WINDOW *win, const int levelNum) {
 	drawMaze(win, maze, 11, 19);
 
 	getch();
-
 }
 
 
