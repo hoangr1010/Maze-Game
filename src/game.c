@@ -9,8 +9,6 @@ void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, co
 
 	char filepath[] = "/data/";
 	strcat(filepath, filename); 
-	char filepath[] = "./data/";
-	strcat(filepath, filename);
 
 	FILE *file = fopen(filepath, "r");
 
@@ -23,6 +21,16 @@ void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, co
 	*rows = *cols = 0;
 	int c;
 	while ((c=fgetc(file)) != EOF && *rows < MAX_HEIGHT) {
+		if (c=='\n') {
+				*cols = 0;
+				(*rows)++;
+			} else {
+				maze[*rows][(*cols)] = c;
+				(*cols)++;
+			}
+		}
+		fclose(file);
+	}
 
 void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols) {
 	wclear(win);
@@ -50,11 +58,13 @@ void splash_screen(){
         printw("|  \\/  |               | ___ \\\n");
         printw("| .  . | __ _ _______  | |_/ /   _ _ __  \n");
         printw("| |\\/| |/ _` |_  / _ \\ |    / | | | '_ \\\n");
+	printw("| |  | | (_| |/ /  __/ | |\\ \\ |_| | | | |\n");
+        printw("\\_|  |_/\\__,_/___\\___| \\_| \\_\\__,_|_| |_|\n");
+        attroff(COLOR_PAIR(1));
+        printw("\nEscape the maze.\n");
         printw("Arrow keys to move, SPACE to attack and Q to use items");
         printw("\npress any key to continue.....");
         refresh();
 
 	getch();
 	clear();
-        /*
-	int ch;
