@@ -34,6 +34,17 @@ void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, co
 		fclose(file);
 	}
 
+void printFileContents(FILE *file, WINDOW *win) {
+    	wclear(win);
+	move(0,0);// Move cursor topleft
+	int ch;
+
+    	// Read and print each character until the end of the file
+    	while ((ch = fgetc(file)) != EOF) {
+        	waddch(win, ch);
+    		}
+	}
+
 void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols) {
 	wclear(win);
 	clear();
@@ -53,8 +64,7 @@ void splash_screen(){
 
     if (has_colors()){
         init_pair(1, COLOR_GREEN, COLOR_BLACK);
-        attron(COLOR_PAIR(1));
-        printw("___  ___               ______\n");            
+        attron(COLOR_PAIR(1));          
         printw("___  ___               ______\n");
         printw("|  \\/  |               | ___ \\\n");
         printw("| .  . | __ _ _______  | |_/ /   _ _ __  \n");
@@ -67,7 +77,9 @@ void splash_screen(){
         printw("\npress any key to continue.....");
         refresh();
 
-	getch();
+	//getch();
+	//clear();
+	//refresh();
         /*
 	int ch;
 

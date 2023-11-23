@@ -14,16 +14,19 @@ int main(void){
     /* Display splash screen */
     splash_screen();
     // Create a window
-    WINDOW *mainWin = newwin(50, 50, 0, 0);
+    WINDOW *mainWin = newwin(30, 80, 0, 0);
     box(mainWin,0,0);
     refresh();
 
     // Game start with levels
     level(mainWin, 1);
+    wrefresh(mainWin);
 
     level(mainWin, 2);
-
+    wrefresh(mainWin);
+    
     level(mainWin, 3);
+    wrefresh(mainWin);
 
     getch();
 
