@@ -3,8 +3,6 @@
 #include <string.h>
 #include "levels.h"
 #include "game.h"
-#include <ncurses.h>
-#include <stdio.h>
 
 void splash_screen(){
     
