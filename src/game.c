@@ -6,7 +6,7 @@
 #include "levels.h"
 #include "game.h"
 
-void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, const char *filename) {
+/*void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, const char *filename) {
 
 	char filepath[] = "./data/";
 	strcat(filepath, filename); 
@@ -32,8 +32,9 @@ void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, co
 			}
 		}
 		fclose(file);
-	}
+	}*/
 
+// function read maze file and print to win
 void printFileContents(FILE *file, WINDOW *win) {
     	wclear(win);
 	move(0,0);// Move cursor topleft
@@ -45,7 +46,7 @@ void printFileContents(FILE *file, WINDOW *win) {
     		}
 	}
 
-void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols) {
+/*void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols) {
 	wclear(win);
 	clear();
 
@@ -57,7 +58,7 @@ void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols)
 	}
 	refresh();
 	wrefresh(win);
-}
+}*/
 
 void splash_screen(){
     
