@@ -8,31 +8,42 @@
 
 void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, const char *filename) {
 
-	char filepath[] = "./data/";
-	strcat(filepath, filename); 
+	char filepath[] = "data/";
+	strcat(filepath, filename);
 
 	FILE *file = fopen(filepath, "r");
 
 	if (file == NULL) {
-		endwin();
-		fprintf(stderr, "\n");
+		fprintf(stderr, "Error opening file: %s\n", filepath);
 		exit(EXIT_FAILURE);
 	}
 
 	*rows = *cols = 0;
 	int c;
 
-	while ((c=fgetc(file)) != EOF && *rows < MAX_HEIGHT) {
+	while ((c=fgetc(file)) != EOF) {
 		if (c=='\n') {
-				*cols = 0;
-				(*rows)++;
-			} else {
-				maze[*rows][(*cols)] = c;
-				(*cols)++;
-			}
+			(*cols) = 0;
+			(*rows)++;
+		} else {
+			maze[(*rows)][(*cols)] = c;
+			(*cols)++;
 		}
-		fclose(file);
 	}
+
+	(*cols) = strlen(maze[0]);
+
+	/*
+	for (int i=0;i<(*rows);i++) {
+               	for (int j=0; j<(*cols); j++) {
+                       	printf("%c", maze[i][j]);
+               	}
+               	printf("\n");
+       	}
+
+		fclose(file);
+	*/
+}
 
 void printFileContents(FILE *file, WINDOW *win) {
     	wclear(win);
@@ -47,7 +58,6 @@ void printFileContents(FILE *file, WINDOW *win) {
 
 void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols) {
 	wclear(win);
-	clear();
 
 	for (int i=0;i<rows;i++) {
 		for (int j=0; j<cols; j++) {
@@ -55,16 +65,15 @@ void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols)
 		}
 		wprintw(win,"\n");
 	}
-	refresh();
+
 	wrefresh(win);
 }
 
 void splash_screen(){
-    
 
     if (has_colors()){
         init_pair(1, COLOR_GREEN, COLOR_BLACK);
-        attron(COLOR_PAIR(1));          
+        attron(COLOR_PAIR(1));
         printw("___  ___               ______\n");
         printw("|  \\/  |               | ___ \\\n");
         printw("| .  . | __ _ _______  | |_/ /   _ _ __  \n");
@@ -77,7 +86,7 @@ void splash_screen(){
         printw("\npress any key to continue.....");
         refresh();
 
-	//getch();
+	getch();
 	//clear();
 	//refresh();
         /*

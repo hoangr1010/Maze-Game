@@ -11,7 +11,8 @@ int main(void){
     raw();
     keypad(stdscr, TRUE);   // Enable special keys
     noecho();   // Do not display input characters
-    /* Display splash screen */
+    //Display splash screen
+
     splash_screen();
     // Create a window
     WINDOW *mainWin = newwin(30, 80, 0, 0);
@@ -20,13 +21,10 @@ int main(void){
 
     // Game start with levels
     level(mainWin, 1);
-    wrefresh(mainWin);
 
     level(mainWin, 2);
-    wrefresh(mainWin);
-    
+
     level(mainWin, 3);
-    wrefresh(mainWin);
 
     getch();
 
@@ -35,3 +33,5 @@ int main(void){
 
     return 0;
 }
+
+
