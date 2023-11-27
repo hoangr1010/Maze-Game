@@ -29,6 +29,15 @@ int main(void){
     getch();
 
     delwin(mainWin);
+
+    int height, width;
+    getmaxyx(stdscr, height, width);
+
+    clear();
+    mvprintw(height, width-20, "Congrats, you win the game!\n");
+    refresh();
+
+    getch();
     endwin();
 
     return 0;
