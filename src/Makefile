@@ -36,3 +36,4 @@ clean:
 test:
 	make
 	./$(EXEC)
+	
