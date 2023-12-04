@@ -9,10 +9,13 @@
 #define MAX_LENGTH 100
 
 
-void level(WINDOW *win, const int levelNum) {
+void level(WINDOW *win, struct Character *player, const int levelNum) {
 	char maze[MAX_HEIGHT][MAX_WIDTH];
 	int rows, cols;
 	int ch;
+	char hiddenBlock;
+
+	getch();
 
 	char filename[MAX_LENGTH];
 	snprintf(filename, MAX_LENGTH, "maze%d.txt", levelNum);
@@ -23,6 +26,9 @@ void level(WINDOW *win, const int levelNum) {
 	int playerY=1;
 
 	do {
+		if (maze[playerY][playerX] != 'P') {
+			hiddenBlock = maze[playerY][playerX];
+		}
 		maze[playerY][playerX] = 'P';
 		drawMaze(win,maze,rows,cols);
 
@@ -57,26 +63,26 @@ void level(WINDOW *win, const int levelNum) {
 				wclear(win);
 				break;
 			case KEY_UP:
-				if (playerY > 0 && maze[playerY-1][playerX] != '#' && maze[playerY-1][playerX] != 'T') {
-					maze[playerY][playerX] = ' ';
+				if (playerY > 0 && maze[playerY-1][playerX] == ' ') {
+                                        maze[playerY][playerX] = hiddenBlock;
 					playerY--;
 				}
 				break;
 			case KEY_DOWN:
-				if (playerY < rows - 1 && maze[playerY+1][playerX] != '#' && maze[playerY+1][playerX] != 'T') {
-					maze[playerY][playerX] = ' ';
+				if (playerY < rows - 1 && maze[playerY+1][playerX] == ' ') {
+                                        maze[playerY][playerX] = hiddenBlock;
 					playerY++;
 				}
 				break;
 			case KEY_LEFT:
-				if (playerX > 0 && maze[playerY][playerX-1] != '#' && maze[playerY][playerX-1] != 'T') {
-                                        maze[playerY][playerX] = ' ';
-					playerX--;
+				if (playerX > 0 && maze[playerY][playerX-1] == ' ') {
+                                        maze[playerY][playerX] = hiddenBlock;
+ 					playerX--;
 				}
 				break;
 			case KEY_RIGHT:
-				if (playerX < cols-1 && maze[playerY][playerX+1] != '#' && maze[playerY][playerX+1] != 'T') {
-					maze[playerY][playerX] = ' ';
+				if (playerX < cols-1 && maze[playerY][playerX+1] == ' ') {
+					maze[playerY][playerX] = hiddenBlock;
 					playerX++;
 				}
 				break;
@@ -92,5 +98,6 @@ void level(WINDOW *win, const int levelNum) {
 
 	getch();
 }
+
 
 

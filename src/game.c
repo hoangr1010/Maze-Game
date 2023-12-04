@@ -6,6 +6,8 @@
 #include "levels.h"
 #include "game.h"
 
+struct Character player = {1, 1, 0, 100};
+
 void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, const char *filename) {
 
 	char filepath[] = "data/";
@@ -46,19 +48,6 @@ void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, co
 	*/
 }
 
-
-
-void printFileContents(FILE *file, WINDOW *win) {
-    	wclear(win);
-	move(0,0);// Move cursor topleft
-	int ch;
-
-    	// Read and print each character until the end of the file
-    	while ((ch = fgetc(file)) != EOF) {
-        	waddch(win, ch);
-    		}
-	}
-
 void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols) {
 	wclear(win);
 
@@ -68,6 +57,9 @@ void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols)
 		}
 		wprintw(win,"\n");
 	}
+
+	wprintw(win,"\nHEALTH PORTION: +++++++++++++++++++++\n");
+	wprintw(win,"items: none");
 
 	wrefresh(win);
 }
