@@ -13,7 +13,6 @@ void level(WINDOW *win, const int levelNum) {
 	char maze[MAX_HEIGHT][MAX_WIDTH];
 	int rows, cols;
 	int ch;
-	int testI = 5;
 
 	char filename[MAX_LENGTH];
 	snprintf(filename, MAX_LENGTH, "maze%d.txt", levelNum);
