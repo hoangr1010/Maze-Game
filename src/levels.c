@@ -31,11 +31,24 @@ void level(WINDOW *win, const int levelNum) {
 		switch (ch) {
 			case 'q':
 				wclear(win);
-				mvwprintw(win,rows/2,cols/2, "quit game successfully\n");
+				mvwprintw(win,rows/2,cols/2, "Quit? y/n\n");
 				wrefresh(win);
-				sleep(3);
-				endwin();
-				exit(EXIT_SUCCESS);
+				do {
+					ch = getch();
+					switch(ch){
+						case 'y':
+							mvwprintw(win,rows/2,cols/2, "Goodbye\n");
+							wrefresh(win);
+							sleep(3);
+							endwin();
+							exit(EXIT_SUCCESS);
+						case 'n':
+							wclear(win);
+							break;
+					}
+				} while(ch != 'y' && ch != 'n');
+				break;
+	
 			case 'p':
 				wclear(win);
 				mvwprintw(win,rows/2,cols/2, "Game Pause. Press 'p' to resume");
@@ -44,25 +57,25 @@ void level(WINDOW *win, const int levelNum) {
 				wclear(win);
 				break;
 			case KEY_UP:
-				if (playerY > 0 && maze[playerY-1][playerX] != '#') {
+				if (playerY > 0 && maze[playerY-1][playerX] != '#' && maze[playerY-1][playerX] != 'T') {
 					maze[playerY][playerX] = ' ';
 					playerY--;
 				}
 				break;
 			case KEY_DOWN:
-				if (playerY < rows - 1 && maze[playerY+1][playerX] != '#') {
+				if (playerY < rows - 1 && maze[playerY+1][playerX] != '#' && maze[playerY+1][playerX] != 'T') {
 					maze[playerY][playerX] = ' ';
 					playerY++;
 				}
 				break;
 			case KEY_LEFT:
-				if (playerX > 0 && maze[playerY][playerX-1] != '#') {
+				if (playerX > 0 && maze[playerY][playerX-1] != '#' && maze[playerY][playerX-1] != 'T') {
                                         maze[playerY][playerX] = ' ';
 					playerX--;
 				}
 				break;
 			case KEY_RIGHT:
-				if (playerX < cols-1 && maze[playerY][playerX+1] != '#') {
+				if (playerX < cols-1 && maze[playerY][playerX+1] != '#' && maze[playerY][playerX+1] != 'T') {
 					maze[playerY][playerX] = ' ';
 					playerX++;
 				}
