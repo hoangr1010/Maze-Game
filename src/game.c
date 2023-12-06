@@ -6,7 +6,7 @@
 #include "levels.h"
 #include "game.h"
 
-struct Character player = {1, 1, 0, 100};
+struct Character player = {1, 1, 0, 20};
 
 void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, const char *filename) {
 
@@ -58,9 +58,58 @@ void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols)
 		wprintw(win,"\n");
 	}
 
-	wprintw(win,"\nHEALTH PORTION: +++++++++++++++++++++\n");
-	wprintw(win,"items: none");
+	wrefresh(win);
+}
 
+int checkAround(char maze[MAX_HEIGHT][MAX_WIDTH], char checkChar, int playerY, int playerX, int *resultRow, int *resultCol) {
+
+	// check top neighbor
+	if (maze[playerY-1][playerX] == checkChar) {
+		*resultRow = playerY-1;
+		*resultCol = playerX;
+		return 1;
+	}
+
+	// Check bottom neighbor
+	if (maze[playerY + 1][playerX] == checkChar) {
+		*resultRow = playerY + 1;
+        	*resultCol = playerX;
+		return 1;
+	}
+
+    	// Check left neighbor
+   	 if (maze[playerY][playerX - 1] == checkChar) {
+        	*resultRow = playerY;
+	        *resultCol = playerX - 1;
+		return 1;
+    	}
+
+    	// Check right neighbor
+    	if (maze[playerY][playerX + 1] == checkChar) {
+       	 	*resultRow = playerY;
+	        *resultCol = playerX + 1;
+		return 1;
+    	}
+
+    	return 0;
+
+}
+
+void playerInfo(WINDOW *win, struct Character *player) {
+	// Health portion
+	wprintw(win, "\nHealth: ");
+	for (int i=0; i<player->health; i++) {
+		wprintw(win,"+");
+	}
+	wprintw(win,"\n");
+
+	// Item
+	wprintw(win, "items: ");
+	if (player->sword) {
+		wprintw(win," sword");
+	} else {
+		wprintw(win, "none");
+	}
 	wrefresh(win);
 }
 

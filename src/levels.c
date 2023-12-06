@@ -14,6 +14,8 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 	int rows, cols;
 	int ch;
 	char hiddenBlock;
+	// resultRow, resultCol is coords of target block we check around player
+	int resultRow, resultCol;
 
 	getch();
 
@@ -22,15 +24,14 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 
 	readMazeFromFile(maze, &rows, &cols, filename);
 
-	int playerX=1;
-	int playerY=1;
-
 	do {
-		if (maze[playerY][playerX] != 'P') {
-			hiddenBlock = maze[playerY][playerX];
+		if (maze[player->positionY][player->positionX] != 'P') {
+			hiddenBlock = maze[player->positionY][player->positionX];
 		}
-		maze[playerY][playerX] = 'P';
+		maze[player->positionY][player->positionX] = 'P';
 		drawMaze(win,maze,rows,cols);
+	        playerInfo(win,player);
+		wrefresh(win);
 
 		ch = getch();
 
@@ -54,7 +55,6 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 					}
 				} while(ch != 'y' && ch != 'n');
 				break;
-	
 			case 'p':
 				wclear(win);
 				mvwprintw(win,rows/2,cols/2, "Game Pause. Press 'p' to resume");
@@ -62,32 +62,47 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 				while (getch() != 'p') {}
 				wclear(win);
 				break;
+
+			case ' ':
+			// open the door
+				if (checkAround(maze, '|', player->positionY, player->positionX, &resultRow, &resultCol)) {
+					// delete door block
+					maze[resultRow][resultCol] = ' ';
+				}
+
+				if (checkAround(maze, 'S', player->positionY, player->positionX, &resultRow, &resultCol)) {
+					player->sword=1;
+					maze[resultRow][resultCol] = ' ';
+				}
+
+				break;
+
 			case KEY_UP:
-				if (playerY > 0 && maze[playerY-1][playerX] == ' ') {
-                                        maze[playerY][playerX] = hiddenBlock;
-					playerY--;
+				if (player->positionY > 0 && maze[player->positionY-1][player->positionX] == ' ') {
+                                        maze[player->positionY][player->positionX] = hiddenBlock;
+					(player->positionY)--;
 				}
 				break;
 			case KEY_DOWN:
-				if (playerY < rows - 1 && maze[playerY+1][playerX] == ' ') {
-                                        maze[playerY][playerX] = hiddenBlock;
-					playerY++;
+				if (player->positionY < rows - 1 && maze[player->positionY+1][player->positionX] == ' ') {
+                                        maze[player->positionY][player->positionX] = hiddenBlock;
+					(player->positionY)++;
 				}
 				break;
 			case KEY_LEFT:
-				if (playerX > 0 && maze[playerY][playerX-1] == ' ') {
-                                        maze[playerY][playerX] = hiddenBlock;
- 					playerX--;
+				if (player->positionX > 0 && maze[player->positionY][player->positionX-1] == ' ') {
+                                        maze[player->positionY][player->positionX] = hiddenBlock;
+ 					player->positionX--;
 				}
 				break;
 			case KEY_RIGHT:
-				if (playerX < cols-1 && maze[playerY][playerX+1] == ' ') {
-					maze[playerY][playerX] = hiddenBlock;
-					playerX++;
+				if (player->positionX < cols-1 && maze[player->positionY][player->positionX+1] == ' ') {
+					maze[player->positionY][player->positionX] = hiddenBlock;
+					player->positionX++;
 				}
 				break;
 		}
-		if (playerX==cols-1 && playerY==rows-2) {
+		if (player->positionX==cols-1 && player->positionY==rows-2) {
 			break;
 		}
 	} while (1);
@@ -95,6 +110,10 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 	wclear(win);
 	mvwprintw(win,rows/2,cols/2, "Congrats! You successfully pass level %d\n", levelNum);
 	wrefresh(win);
+
+	//reset player coordinates
+	player->positionY = 1;
+	player->positionX = 1;
 
 	getch();
 }
