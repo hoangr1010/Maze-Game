@@ -28,7 +28,21 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 		if (maze[player->positionY][player->positionX] != 'P') {
 			hiddenBlock = maze[player->positionY][player->positionX];
 		}
-		maze[player->positionY][player->positionX] = 'P';
+
+		if (maze[player->positionY][player->positionX] != 'E') {
+			maze[player->positionY][player->positionX] = 'P';
+		} else {
+			player->health-=3;
+			if (player->health < 1) {
+				wclear(win);
+				mvwprintw(win,rows/2,cols/2, "You die :( Game over!\n");
+				wrefresh(win);
+				sleep(3);
+				endwin();
+				exit(EXIT_SUCCESS);
+			}
+		}
+
 		drawMaze(win,maze,rows,cols);
 	        playerInfo(win,player);
 		wrefresh(win);
@@ -64,39 +78,52 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 				break;
 
 			case ' ':
-			// open the door
+				// open the door
 				if (checkAround(maze, '|', player->positionY, player->positionX, &resultRow, &resultCol)) {
 					// delete door block
 					maze[resultRow][resultCol] = ' ';
 				}
 
+				// pick up sword
 				if (checkAround(maze, 'S', player->positionY, player->positionX, &resultRow, &resultCol)) {
 					player->sword=1;
 					maze[resultRow][resultCol] = ' ';
 				}
 
+				// kill enemies
+				if (checkAround(maze, 'E', player->positionY, player->positionX, &resultRow, &resultCol)) {
+					if (player->sword) {
+						maze[resultRow][resultCol] = ' ';
+					}
+				}
+
+				// sleep
+				if (checkAround(maze, 'L', player->positionY, player->positionX, &resultRow, &resultCol) || checkAround(maze, '_', player->positionY, player->positionX, &resultRow, &resultCol)) {
+					player->health = 20;
+				}
+
 				break;
 
 			case KEY_UP:
-				if (player->positionY > 0 && maze[player->positionY-1][player->positionX] == ' ') {
+				if (player->positionY > 0 && (maze[player->positionY-1][player->positionX] == ' ' || maze[player->positionY-1][player->positionX] == 'E')) {
                                         maze[player->positionY][player->positionX] = hiddenBlock;
 					(player->positionY)--;
 				}
 				break;
 			case KEY_DOWN:
-				if (player->positionY < rows - 1 && maze[player->positionY+1][player->positionX] == ' ') {
+				if (player->positionY < rows - 1 && (maze[player->positionY+1][player->positionX] == ' ' || maze[player->positionY+1][player->positionX] == 'E')) {
                                         maze[player->positionY][player->positionX] = hiddenBlock;
 					(player->positionY)++;
 				}
 				break;
 			case KEY_LEFT:
-				if (player->positionX > 0 && maze[player->positionY][player->positionX-1] == ' ') {
+				if (player->positionX > 0 && (maze[player->positionY][player->positionX-1] == ' ' || maze[player->positionY][player->positionX-1] == 'E')) {
                                         maze[player->positionY][player->positionX] = hiddenBlock;
  					player->positionX--;
 				}
 				break;
 			case KEY_RIGHT:
-				if (player->positionX < cols-1 && maze[player->positionY][player->positionX+1] == ' ') {
+				if (player->positionX < cols-1 && (maze[player->positionY][player->positionX+1] == ' ' || maze[player->positionY][player->positionX+1] == 'E')) {
 					maze[player->positionY][player->positionX] = hiddenBlock;
 					player->positionX++;
 				}

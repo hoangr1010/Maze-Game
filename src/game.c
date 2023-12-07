@@ -91,6 +91,13 @@ int checkAround(char maze[MAX_HEIGHT][MAX_WIDTH], char checkChar, int playerY, i
 		return 1;
     	}
 
+	// in case checkChar='E', check the current location
+	if (checkChar == 'E' && maze[playerY][playerX]==checkChar) {
+		*resultRow = playerY;
+                *resultCol = playerX;
+		return 1;
+	}
+
     	return 0;
 
 }
