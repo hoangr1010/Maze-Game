@@ -7,9 +7,10 @@ int main(void){
 
     initscr();
     start_color();  // Enable colour support
-    cbreak();   // Disable line buffering
-    raw();
+    cbreak();
     keypad(stdscr, TRUE);   // Enable special keys
+    nodelay(stdscr, TRUE);  // Removes delay for getch() to return ERR
+    //timeout(50); // Adds 10 millisecond delay
     noecho();   // Do not display input characters
     //Display splash screen
 

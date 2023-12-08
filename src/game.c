@@ -5,6 +5,7 @@
 #include <time.h>
 #include "levels.h"
 #include "game.h"
+#include<unistd.h>
 
 void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, const char *filename) {
 
@@ -72,6 +73,45 @@ void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols)
 	wrefresh(win);
 }
 
+
+struct Enemy createEnemy(int row, int col){
+	struct Enemy newEnemy;
+	newEnemy.row = row;
+	newEnemy.col = col;
+	
+	return newEnemy;
+}
+
+int createEnemies(const char *filename,struct Enemy enemies[10]){
+	char filepath[] = "data/";
+	strcat(filepath, filename);
+
+	FILE *file = fopen(filepath, "r");
+
+	if (file == NULL) {
+		fprintf(stderr, "Error opening file: %s\n", filepath);
+		exit(EXIT_FAILURE);
+	}
+	int rows = 0, cols = 0;
+	int c, i=0;
+	while ((c=fgetc(file)) != EOF) {
+		if (c=='\n') {
+			(cols) = 0;
+			(rows)++;
+		} else {
+			(cols)++;
+		}
+
+		if (c == 'E'){
+			struct Enemy newEnemy = createEnemy(rows, cols-1);
+			enemies[i] = newEnemy;
+			i++;
+		}
+	}
+	fclose(file);
+	return i;
+}
+
 void splash_screen(){
 
     if (has_colors()){
@@ -81,25 +121,30 @@ void splash_screen(){
         printw("|  \\/  |               | ___ \\\n");
         printw("| .  . | __ _ _______  | |_/ /   _ _ __  \n");
         printw("| |\\/| |/ _` |_  / _ \\ |    / | | | '_ \\\n");
-	printw("| |  | | (_| |/ /  __/ | |\\ \\ |_| | | | |\n");
+		printw("| |  | | (_| |/ /  __/ | |\\ \\ |_| | | | |\n");
         printw("\\_|  |_/\\__,_/___\\___| \\_| \\_\\__,_|_| |_|\n");
         attroff(COLOR_PAIR(1));
         printw("\nEscape the maze.\n");
         printw("Arrow keys to move, SPACE to attack and Q to use items");
-        printw("\npress any key to continue.....");
+        printw("\npress any key to continue");
         refresh();
 
-	getch();
-	//clear();
-	//refresh();
-        /*
-	int ch;
-
-        while((ch = getch()) == err()){
-            printw("\npress any key to continue...");
-            refresh();
+		getch();
+        while(1){
+			for(int i=0; i<4;i++){
+				if(getch() != ERR) goto exitLoop;
+				mvprintw(9,25+i,".");
+				refresh();
+				sleep(1);
+			}
+			for(int i=0; i<4;i++){
+				if(getch() != ERR) goto exitLoop;
+				mvprintw(9,28-i," ");
+				refresh();
+			}
+			sleep(1);
         }
-        */
     }
+	exitLoop:
     return;
 }
