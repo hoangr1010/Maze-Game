@@ -21,11 +21,11 @@ int main(void){
     refresh();
 
     // Game start with levels
-    level(mainWin, 1);
+    level(mainWin, &player, 1);
 
-    level(mainWin, 2);
+    level(mainWin, &player, 2);
 
-    level(mainWin, 3);
+    level(mainWin, &player, 3);
 
     getch();
 
@@ -35,7 +35,7 @@ int main(void){
     getmaxyx(stdscr, height, width);
 
     clear();
-    mvprintw(height, width-20, "Congrats, you win the game!\n");
+    mvprintw(height/2, (width/2)-20, "Congrats, you win the game!\n");
     refresh();
 
     getch();

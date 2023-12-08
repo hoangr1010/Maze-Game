@@ -10,11 +10,15 @@
 #define MAX_LENGTH 100
 
 
-void level(WINDOW *win, const int levelNum) {
+void level(WINDOW *win, struct Character *player, const int levelNum) {
 	char maze[MAX_HEIGHT][MAX_WIDTH];
 	int rows, cols;
 	int ch;
-	//int testI = 5;
+	char hiddenBlock;
+	// resultRow, resultCol is coords of target block we check around player
+	int resultRow, resultCol;
+
+	getch();
 
 	char filename[MAX_LENGTH];
 	snprintf(filename, MAX_LENGTH, "maze%d.txt", levelNum);
@@ -36,6 +40,21 @@ void level(WINDOW *win, const int levelNum) {
 	do {
 		/* Move Enemies while player is not inputting */
 		while ((ch=getch()) == ERR && eCounter > 0){
+			
+			if (maze[player->positionY][player->positionX] != 'E') {
+				maze[player->positionY][player->positionX] = 'P';
+			} else {
+				player->health-=3;
+				if (player->health < 1) {
+					wclear(win);
+					mvwprintw(win,rows/2,cols/2, "You die :( Game over!\n");
+					wrefresh(win);
+					sleep(3);
+					endwin();
+					exit(EXIT_SUCCESS);
+				}
+			}
+			
 			/* Move Enemies */
 			timeout(450);
 			for (int i = 0; i<eCounter; i++ ){
@@ -77,6 +96,7 @@ void level(WINDOW *win, const int levelNum) {
 				}
 			}
 			drawMaze(win,maze,rows,cols);
+			playerInfo(win,player);
 		}
 		timeout(10);
 		//ch = getch();
@@ -101,7 +121,6 @@ void level(WINDOW *win, const int levelNum) {
 					}
 				} while(ch != 'y' && ch != 'n');
 				break;
-	
 			case 'p':
 				wclear(win);
 				mvwprintw(win,rows/2,cols/2, "Game Pause. Press 'p' to resume");
@@ -110,53 +129,70 @@ void level(WINDOW *win, const int levelNum) {
 				wclear(win);
 				break;
 
+			case ' ':
+				// open the door
+				if (checkAround(maze, '|', player->positionY, player->positionX, &resultRow, &resultCol)) {
+					// delete door block
+					maze[resultRow][resultCol] = ' ';
+				}
+
+				// pick up sword
+				if (checkAround(maze, 'S', player->positionY, player->positionX, &resultRow, &resultCol)) {
+					player->sword=1;
+					maze[resultRow][resultCol] = ' ';
+				}
+
+				// kill enemies
+				if (checkAround(maze, 'E', player->positionY, player->positionX, &resultRow, &resultCol)) {
+					if (player->sword) {
+						maze[resultRow][resultCol] = ' ';
+					}
+				}
+
+				// sleep
+				if (checkAround(maze, 'L', player->positionY, player->positionX, &resultRow, &resultCol) || checkAround(maze, '_', player->positionY, player->positionX, &resultRow, &resultCol)) {
+					player->health = 20;
+				}
+
+				break;
+
 			case KEY_UP:
-				if (playerY > 0 && maze[playerY-1][playerX] != '#' && maze[playerY-1][playerX] != 'T') {
-					maze[playerY][playerX] = ' ';
-					playerY--;
-					/*
-					maze[playerY][playerX] = 'P';
-					drawMaze(win,maze,rows,cols);*/
+				if (player->positionY > 0 && (maze[player->positionY-1][player->positionX] == ' ' || maze[player->positionY-1][player->positionX] == 'E')) {
+                                        maze[player->positionY][player->positionX] = hiddenBlock;
+					(player->positionY)--;
 				}
 				break;
 			case KEY_DOWN:
-				if (playerY < rows - 1 && maze[playerY+1][playerX] != '#' && maze[playerY+1][playerX] != 'T') {
-					maze[playerY][playerX] = ' ';
-					playerY++;
-					/*
-					maze[playerY][playerX] = 'P';
-					drawMaze(win,maze,rows,cols);*/
+				if (player->positionY < rows - 1 && (maze[player->positionY+1][player->positionX] == ' ' || maze[player->positionY+1][player->positionX] == 'E')) {
+                                        maze[player->positionY][player->positionX] = hiddenBlock;
+					(player->positionY)++;
 				}
 				break;
 			case KEY_LEFT:
-				if (playerX > 0 && maze[playerY][playerX-1] != '#' && maze[playerY][playerX-1] != 'T') {
-                    maze[playerY][playerX] = ' ';
-					playerX--;
-					/*
-					maze[playerY][playerX] = 'P';
-					drawMaze(win,maze,rows,cols);*/
+				if (player->positionX > 0 && (maze[player->positionY][player->positionX-1] == ' ' || maze[player->positionY][player->positionX-1] == 'E')) {
+                                        maze[player->positionY][player->positionX] = hiddenBlock;
+ 					player->positionX--;
 				}
 				break;
 			case KEY_RIGHT:
-				if (playerX < cols-1 && maze[playerY][playerX+1] != '#' && maze[playerY][playerX+1] != 'T') {
-					maze[playerY][playerX] = ' ';
-					playerX++;
-					/*
-					maze[playerY][playerX] = 'P';
-					drawMaze(win,maze,rows,cols);*/
+				if (player->positionX < cols-1 && (maze[player->positionY][player->positionX+1] == ' ' || maze[player->positionY][player->positionX+1] == 'E')) {
+					maze[player->positionY][player->positionX] = hiddenBlock;
+					player->positionX++;
 				}
 				break;
 		}
-
-		/* Check end condition for level */
-		if (playerX==cols-1 && playerY==rows-2) {
+		if (player->positionX==cols-1 && player->positionY==rows-2) {
 			break;
 		}
 		maze[playerY][playerX] = 'P';
 
 		/* Move Enemies */
 		/* Draw the new maze */
+		if (maze[player->positionY][player->positionX] != 'P') {
+			hiddenBlock = maze[player->positionY][player->positionX];
+			}
 		drawMaze(win,maze,rows,cols);
+		playerInfo(win,player);
 		
 	} while (1);
 
@@ -164,7 +200,12 @@ void level(WINDOW *win, const int levelNum) {
 	mvwprintw(win,rows/2,cols/2, "Congrats! You successfully pass level %d\n", levelNum);
 	wrefresh(win);
 
+	//reset player coordinates
+	player->positionY = 1;
+	player->positionX = 1;
+
 	getch();
 }
+
 
 

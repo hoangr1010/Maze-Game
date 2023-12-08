@@ -7,6 +7,8 @@
 #include "game.h"
 #include<unistd.h>
 
+struct Character player = {1, 1, 0, 20};
+
 void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, const char *filename) {
 
 	char filepath[] = "data/";
@@ -46,19 +48,6 @@ void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, co
 		fclose(file);
 	*/
 }
-
-
-
-void printFileContents(FILE *file, WINDOW *win) {
-    	wclear(win);
-	move(0,0);// Move cursor topleft
-	int ch;
-
-    	// Read and print each character until the end of the file
-    	while ((ch = fgetc(file)) != EOF) {
-        	waddch(win, ch);
-    		}
-	}
 
 void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols) {
 	wclear(win);
@@ -110,6 +99,64 @@ int createEnemies(const char *filename,struct Enemy enemies[10]){
 	}
 	fclose(file);
 	return i;
+}
+int checkAround(char maze[MAX_HEIGHT][MAX_WIDTH], char checkChar, int playerY, int playerX, int *resultRow, int *resultCol) {
+
+	// check top neighbor
+	if (maze[playerY-1][playerX] == checkChar) {
+		*resultRow = playerY-1;
+		*resultCol = playerX;
+		return 1;
+	}
+
+	// Check bottom neighbor
+	if (maze[playerY + 1][playerX] == checkChar) {
+		*resultRow = playerY + 1;
+        	*resultCol = playerX;
+		return 1;
+	}
+
+    	// Check left neighbor
+   	 if (maze[playerY][playerX - 1] == checkChar) {
+        	*resultRow = playerY;
+	        *resultCol = playerX - 1;
+		return 1;
+    	}
+
+    	// Check right neighbor
+    	if (maze[playerY][playerX + 1] == checkChar) {
+       	 	*resultRow = playerY;
+	        *resultCol = playerX + 1;
+		return 1;
+    	}
+
+	// in case checkChar='E', check the current location
+	if (checkChar == 'E' && maze[playerY][playerX]==checkChar) {
+		*resultRow = playerY;
+                *resultCol = playerX;
+		return 1;
+	}
+
+    	return 0;
+
+}
+
+void playerInfo(WINDOW *win, struct Character *player) {
+	// Health portion
+	wprintw(win, "\nHealth: ");
+	for (int i=0; i<player->health; i++) {
+		wprintw(win,"+");
+	}
+	wprintw(win,"\n");
+
+	// Item
+	wprintw(win, "items: ");
+	if (player->sword) {
+		wprintw(win," sword");
+	} else {
+		wprintw(win, "none");
+	}
+	wrefresh(win);
 }
 
 void splash_screen(){
