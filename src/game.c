@@ -62,6 +62,10 @@ void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols)
 	wrefresh(win);
 }
 
+void printObject(WINDOW *win, int x, int y, char ch) {
+    mvwprintw(win, y, x, "%c", ch);
+    wrefresh(win);
+}
 
 struct Enemy createEnemy(int row, int col){
 	struct Enemy newEnemy;
