@@ -41,6 +41,10 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 		/* Move Enemies while player is not inputting */
 		while ((ch=getch()) == ERR && eCounter > 0){
 			
+			if (maze[player->positionY][player->positionX] != 'P') {
+			hiddenBlock = maze[player->positionY][player->positionX];
+			} 
+			
 			if (maze[player->positionY][player->positionX] != 'E') {
 				maze[player->positionY][player->positionX] = 'P';
 			} else {
@@ -146,6 +150,12 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 				if (checkAround(maze, 'E', player->positionY, player->positionX, &resultRow, &resultCol)) {
 					if (player->sword) {
 						maze[resultRow][resultCol] = ' ';
+						for(int i = 0; i<eCounter; i++){
+							if (Enemies[i].row == resultRow && Enemies[i].col == resultCol){
+								Enemies[i] = Enemies[i+1];
+								eCounter--;
+							}
+						}
 					}
 				}
 
@@ -158,19 +168,19 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 
 			case KEY_UP:
 				if (player->positionY > 0 && (maze[player->positionY-1][player->positionX] == ' ' || maze[player->positionY-1][player->positionX] == 'E')) {
-                                        maze[player->positionY][player->positionX] = hiddenBlock;
+                    maze[player->positionY][player->positionX] = hiddenBlock;
 					(player->positionY)--;
 				}
 				break;
 			case KEY_DOWN:
 				if (player->positionY < rows - 1 && (maze[player->positionY+1][player->positionX] == ' ' || maze[player->positionY+1][player->positionX] == 'E')) {
-                                        maze[player->positionY][player->positionX] = hiddenBlock;
+                    maze[player->positionY][player->positionX] = hiddenBlock;
 					(player->positionY)++;
 				}
 				break;
 			case KEY_LEFT:
 				if (player->positionX > 0 && (maze[player->positionY][player->positionX-1] == ' ' || maze[player->positionY][player->positionX-1] == 'E')) {
-                                        maze[player->positionY][player->positionX] = hiddenBlock;
+                    maze[player->positionY][player->positionX] = hiddenBlock;
  					player->positionX--;
 				}
 				break;
@@ -184,13 +194,13 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 		if (player->positionX==cols-1 && player->positionY==rows-2) {
 			break;
 		}
-		maze[playerY][playerX] = 'P';
-
-		/* Move Enemies */
+	
 		/* Draw the new maze */
 		if (maze[player->positionY][player->positionX] != 'P') {
 			hiddenBlock = maze[player->positionY][player->positionX];
-			}
+			} 
+
+		maze[playerY][playerX] = 'P';
 		drawMaze(win,maze,rows,cols);
 		playerInfo(win,player);
 		
