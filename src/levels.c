@@ -36,7 +36,7 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 
 	do {
 		/* Move Enemies while player is not inputting */
-		while ((ch=getch()) == ERR && eCounter > 0){
+		while ((ch=getch()) == ERR){
 			if (maze[player->positionY][player->positionX] != 'E') {
 				//printObject(win,player->positionX,player->positionY,'P');
 				maze[player->positionY][player->positionX] = 'P';
@@ -60,7 +60,7 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 				switch (randomNum){
 					/* Move up */
 					case 1:
-						if (maze[Enemies[i].row+1][Enemies[i].col] != '#' && maze[Enemies[i].row+1][Enemies[i].col] != 'T' && maze[Enemies[i].row+1][Enemies[i].col] != '|') {
+						if (maze[Enemies[i].row+1][Enemies[i].col] == ' ' || maze[Enemies[i].row+1][Enemies[i].col] == 'P') {
 							maze[Enemies[i].row][Enemies[i].col] = ' ';
 							Enemies[i].row++;
 							maze[Enemies[i].row][Enemies[i].col] = 'E';
@@ -68,7 +68,7 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 						break;
 					/* Move down */
 					case 2:
-						if (maze[Enemies[i].row-1][Enemies[i].col] != '#' && maze[Enemies[i].row-1][Enemies[i].col] != 'T' && maze[Enemies[i].row-1][Enemies[i].col] != '|') {
+						if (maze[Enemies[i].row-1][Enemies[i].col] == ' ' || maze[Enemies[i].row-1][Enemies[i].col] == 'P') {
 							maze[Enemies[i].row][Enemies[i].col] = ' ';
 							Enemies[i].row--;
 							maze[Enemies[i].row][Enemies[i].col] = 'E';
@@ -76,7 +76,7 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 						break;
 					/* Move right */
 					case 3:
-						if (maze[Enemies[i].row][Enemies[i].col+1] != '#' && maze[Enemies[i].row][Enemies[i].col+1] != 'T' && maze[Enemies[i].row][Enemies[i].col+1] != '|') {
+						if (maze[Enemies[i].row][Enemies[i].col+1] == ' ' || maze[Enemies[i].row][Enemies[i].col+1] == 'P') {
 							maze[Enemies[i].row][Enemies[i].col] = ' ';
 							Enemies[i].col++;
 							maze[Enemies[i].row][Enemies[i].col] = 'E';
@@ -84,7 +84,7 @@ void level(WINDOW *win, struct Character *player, const int levelNum) {
 						break;
 					/* Move left */
 					case 4:
-						if (maze[Enemies[i].row][Enemies[i].col-1] != '#' && maze[Enemies[i].row][Enemies[i].col-1] != 'T' && maze[Enemies[i].row][Enemies[i].col-1] != '|') {
+						if (maze[Enemies[i].row][Enemies[i].col-1] == ' ' || maze[Enemies[i].row][Enemies[i].col-1] == 'P') {
 							maze[Enemies[i].row][Enemies[i].col] = ' ';
 							Enemies[i].col--;
 							maze[Enemies[i].row][Enemies[i].col] = 'E';
