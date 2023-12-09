@@ -15,6 +15,7 @@ void readMazeFromFile(char maze[MAX_HEIGHT][MAX_WIDTH], int *rows, int *cols, co
 void drawMaze(WINDOW *win, char maze[MAX_HEIGHT][MAX_WIDTH], int rows, int cols);
 void splash_screen();
 void printFileContents(FILE *file, WINDOW *win);
+void printObject(WINDOW *win, int x, int y, char ch);
 //void moveEnemy(Enemy enemy);
 
 struct Enemy{
